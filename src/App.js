@@ -9,20 +9,22 @@ class App extends React.Component {
     error: null
   }
 
-  onSearch = (e, query) => {
+  onSearch = (e, title, printType, filter) => {
     e.preventDefault()
-    this.fetchBooks(query)
+    this.fetchBooks(this.queryCreate(title, printType, filter))
   }
 
-  queryCreate = (print, book, title) => {
-    if book ? ""
-    if
-  queryString = '?q='
-
+  queryCreate = (title, printType, filter) => {
+    const queryArray = []
+    if(title) queryArray.push(title ? `?q=${title}` : '')
+    if(printType)queryArray.push( printType ? `printType=${printType}` : '')
+    if(filter)queryArray.push( filter ? `filter=${filter}` : '')
+    return queryArray.join('&')
   }
+
 
   fetchBooks = (query) => {
-    const url = `https://www.googleapis.com/books/v1/volumes?q=${query}`
+    const url = `https://www.googleapis.com/books/v1/volumes${query}`
     const options = {
       method: 'GET',
       headers: {
