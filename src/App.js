@@ -22,6 +22,22 @@ class App extends React.Component {
     return queryArray.join('&')
   }
 
+  stateBuilder = (data) => {
+    const newState = []
+    data.forEach(item => {
+      newState.push({
+        key: item.id,
+        title: item.volumeInfo.title,
+        authors: item.volumeInfo.authors,
+        description: item.volumeInfo.description,
+        url: item.volumeInfo.imageLinks.smallThumbnail,
+        listPrice: item.saleInfo.listPrice
+      })
+    })
+    this.setState({
+      items: [...newState]
+    })
+  }
 
   fetchBooks = (query) => {
     const url = `https://www.googleapis.com/books/v1/volumes${query}`
@@ -41,9 +57,7 @@ class App extends React.Component {
       })
       .then(res => res.json())
       .then(data => {
-        this.setState({
-          items: data.items
-        })
+        this.stateBuilder(data.items)
       }).catch(err => {
         this.setState({
           error: err.message
